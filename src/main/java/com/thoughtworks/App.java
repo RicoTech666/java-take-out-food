@@ -1,6 +1,5 @@
 package com.thoughtworks;
 
-import java.rmi.MarshalledObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +15,6 @@ public class App {
         System.out.println(summary);
     }
 
-    /**
-     * 接收用户选择的菜品和数量，返回计算后的汇总信息
-     *
-     * @param selectedItems 选择的菜品信息
-     */
     public static String Charge(String selectedItems) {
         Map<String, Integer> inputMap = parseInput(selectedItems);
         Map<String, Double> pricesToBePrinted = getPricesToBePrinted(inputMap);
@@ -103,7 +97,7 @@ public class App {
         if (!discountedNames.isEmpty()) {
             for (int i = 0; i < discountedNames.size(); i++) {
                 if (0 != i) {
-                    promotionStr += discountedNames[i] + ", ";
+                    promotionStr += discountedNames.get(i) + ", ";
                 } else {
                     promotionStr += discountedNames + ")";
                 }
@@ -120,7 +114,7 @@ public class App {
         if (discountWithFixedPrice >= discountWithHalfPrice) {
             promotions.put("满30减6元，省6元", discountWithFixedPrice);
         } else {
-            promotions.put(promotionStr + ", 省" + discountWithHalfPrice + "元"，discountWithHalfPrice);
+            promotions.put(promotionStr + ", 省" + discountWithHalfPrice + "元", discountWithHalfPrice);
         }
 
         return promotions;
@@ -134,30 +128,22 @@ public class App {
         return finalPrice;
     }
 
-    /**
-     * 获取每个菜品依次的编号
-     */
+
     public static String[] getItemIds() {
         return new String[]{"ITEM0001", "ITEM0013", "ITEM0022", "ITEM0030"};
     }
 
-    /**
-     * 获取每个菜品依次的名称
-     */
+
     public static String[] getItemNames() {
-        return new String[]{"黄焖鸡", "肉夹馍", "凉皮", "冰粉"};
+        return new String[]{"黄焖鸡","肉夹馍","凉皮","冰峰"};
     }
 
-    /**
-     * 获取每个菜品依次的价格
-     */
+
     public static double[] getItemPrices() {
         return new double[]{18.00, 6.00, 8.00, 2.00};
     }
 
-    /**
-     * 获取半价菜品的编号
-     */
+
     public static String[] getHalfPriceIds() {
         return new String[]{"ITEM0001", "ITEM0022"};
     }
