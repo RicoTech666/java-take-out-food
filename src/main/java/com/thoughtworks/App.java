@@ -1,9 +1,6 @@
 package com.thoughtworks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -11,11 +8,11 @@ public class App {
         Scanner scan = new Scanner(System.in);
         System.out.println("请点餐（菜品Id x 数量，用逗号隔开）：");
         String selectedItems = scan.nextLine();
-        String summary = Charge(selectedItems);
+        String summary = bestCharge(selectedItems);
         System.out.println(summary);
     }
 
-    public static String Charge(String selectedItems) {
+    public static String bestCharge(String selectedItems) {
         Map<String, Integer> inputMap = parseInput(selectedItems);
         Map<String, Double> pricesToBePrinted = getPricesToBePrinted(inputMap);
         double totalPrice = getTotalPrice(pricesToBePrinted);
@@ -26,22 +23,22 @@ public class App {
         for (Map.Entry<String, Double> entry : pricesToBePrinted.entrySet()) {
             summary += entry.getKey() + "\n";
         }
-        summary += "-----------------------------------";
+        summary += "-----------------------------------\n";
         if (finalPrice != totalPrice) {
-            summary += "使用优惠：\n";
+            summary += "使用优惠:\n";
             for (Map.Entry<String, Double> entry : promotions.entrySet()) {
                 summary += entry.getKey() + "\n";
             }
             summary += "-----------------------------------\n";
         }
-        summary += "总计：" + finalPrice + "元\n" + "===================================";
+        summary += "总计：" + (int) finalPrice + "元\n" + "===================================";
         return summary;
     }
 
     public static Map<String, Integer> parseInput(String selectedItems) {
         String[] selectedItemsArr = selectedItems.split(
                 ",");
-        Map<String, Integer> inputMap = new HashMap();
+        Map<String, Integer> inputMap = new LinkedHashMap<>();
         for (String element : selectedItemsArr
         ) {
             inputMap.put(element.split(" x ")[0], Integer.parseInt(element.split(" x ")[1]));
@@ -53,12 +50,12 @@ public class App {
         String[] itemIds = getItemIds();
         String[] itemNames = getItemNames();
         double[] itemPrices = getItemPrices();
-        Map<String, Double> pricesToBePrinted = new HashMap<>();
+        Map<String, Double> pricesToBePrinted = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : inputMap.entrySet()) {
             for (int i = 0; i < itemIds.length; i++) {
                 if (entry.getKey().equals(itemIds[i])) {
                     pricesToBePrinted.put(itemNames[i] + " x " + entry.getValue() + " = " +
-                            entry.getValue() * itemPrices[i] + "元", entry.getValue() * itemPrices[i]);
+                            (int) (entry.getValue() * itemPrices[i]) + "元", entry.getValue() * itemPrices[i]);
                 }
             }
         }
@@ -96,10 +93,10 @@ public class App {
         }
         if (!discountedNames.isEmpty()) {
             for (int i = 0; i < discountedNames.size(); i++) {
-                if (0 != i) {
-                    promotionStr += discountedNames.get(i) + ", ";
+                if (i == discountedNames.size() - 1) {
+                    promotionStr += discountedNames.get(i) + ")";
                 } else {
-                    promotionStr += discountedNames + ")";
+                    promotionStr += discountedNames.get(i) + "，";
                 }
             }
 
@@ -114,7 +111,7 @@ public class App {
         if (discountWithFixedPrice >= discountWithHalfPrice) {
             promotions.put("满30减6元，省6元", discountWithFixedPrice);
         } else {
-            promotions.put(promotionStr + ", 省" + discountWithHalfPrice + "元", discountWithHalfPrice);
+            promotions.put(promotionStr + "，省" + (int) discountWithHalfPrice + "元", discountWithHalfPrice);
         }
 
         return promotions;
@@ -135,7 +132,7 @@ public class App {
 
 
     public static String[] getItemNames() {
-        return new String[]{"黄焖鸡","肉夹馍","凉皮","冰峰"};
+        return new String[]{"黄焖鸡", "肉夹馍", "凉皮", "冰峰"};
     }
 
 

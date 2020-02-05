@@ -1,3 +1,5 @@
+import javax.tools.JavaCompiler
+
 plugins {
     id 'java'
 }
@@ -20,4 +22,8 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8";
 }
